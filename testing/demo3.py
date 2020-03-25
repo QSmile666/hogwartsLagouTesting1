@@ -1,1 +1,2 @@
-import
+class Demo3:
+    pass
