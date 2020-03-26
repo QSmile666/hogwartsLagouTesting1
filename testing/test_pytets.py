@@ -1,6 +1,8 @@
 from python.calc import Calc
 from math import fabs
 import math
+import pytest
+import pytest_ordering
 
 '''
 等价类设计测试用例
@@ -16,6 +18,16 @@ import math
 
 
 class TestCalc:
+
+    def setup_module(self):
+        print("setup_module")
+
+    @classmethod
+    def setup_class(self):
+        print("setup_class")
+
+    def setup_method(self):
+        print("setup_method")
 
     def test_add(self):
         calc = Calc()
@@ -37,6 +49,7 @@ class TestCalc:
         calc = Calc()
         assert calc.add(8, 0) == 8
 
+    @pytest.mark.run(order=-1)
     def test_add_5(self):
         calc = Calc()
         assert calc.add(-9, 0) == -9
@@ -54,7 +67,7 @@ class TestCalc:
     #
     # 无效等价类
     # 1. 被除数为任意数，除数是0   10 / 0
-
+    @pytest.mark.run(order=1)
     def test_div_1(self):
         calc = Calc()
         assert calc.div(99, 3) == 33
@@ -78,3 +91,38 @@ class TestCalc:
     def test_div_6(self):
         calc = Calc()
         assert calc.div(10, 0) == 0
+
+
+class Demo:
+    kind = 0
+
+    def __init__(self):
+        self.name = ""
+
+
+class TestCalc2:
+    @classmethod
+    def setup_class(self):
+        print("setup_class \n")
+
+    def test_Demo1(self):
+        demo1 = Demo()
+        demo2 = Demo()
+        print(demo1.kind)
+        print(demo2.kind)
+        print(Demo.kind)
+
+        Demo.kind = 1
+        print(demo1.kind)
+        print(demo2.kind)
+        print(Demo.kind)
+
+        demo1.kind = 2
+        print(demo1.kind)
+        print(demo2.kind)
+        print(Demo.kind)
+
+        demo2.kind = 3
+        print(demo1.kind)
+        print(demo2.kind)
+        print(Demo.kind)
